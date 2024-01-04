@@ -1,6 +1,6 @@
 const inquirer = require('inquirer')
-const Roles = require('./db_Choices/db_Department')
-const Department = require('./db_Choices/db_Department')
+const Roles = require('./db_actions/db_Department')
+const Department = require('./db_actions/db_Department')
 const main = require('../mainMenu')
 
 const viewAllRoles = () => {
