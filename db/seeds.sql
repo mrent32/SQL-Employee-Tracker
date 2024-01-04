@@ -1,4 +1,4 @@
-INSERT INTO employees (id, name, roles, department)
+INSERT INTO employee (id, name, roles, department)
 VALUES (1, 'John Smith'),
         (2, 'Jane Doe'),
         (3, 'Jimmy Redcorn'),

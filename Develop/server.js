@@ -1,5 +1,7 @@
  const express = require('express');
 
+ const router = require('express').Router()
+
  const mysql = require('mysql2');
 
  const PORT = process.env.PORT || 3001;
@@ -9,16 +11,16 @@
  app.use(express.json());
 
  const db = mysql.createConnection(
+    process.env.DB_PASSWORD,
     {
         host: 'localhost',
         user: 'root',
-        password: 'anir7bas',
         database: 'employees_db',
     },
     console.log('Connected to the employees_db database.')
  );
 
- app.post('/api/new-employee', ({ body}, res)=> {
+router.post('/api/new-employee', ({ body}, res)=> {
     const sql = `INSERT INTO employees (employee_name) VALUES (?)`;
 
     const params = [body.employee_name];
