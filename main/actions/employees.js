@@ -1,19 +1,9 @@
 const inquirer = require('inquirer');
 const main = require('../mainMenu')
+const Employee  = require('./db_actions/db_Employee')
+const Roles = require('./db_actions/db_Roles')
 
-const viewAllEmployees = () => {
-    const empMenu = new Employee()
-    empMenu
-    viewAll()
-    .then((empTable) => {
-        console.log(``)
-        console.table(empTable)
-        console.log('')
-    })
-    .then(() => {
-        main.mainMenu
-    })
-}
+
 
 const addEmployee = () => {
     const roles = new Roles()
@@ -94,7 +84,7 @@ const updateEmployee = ()=> {
     const roles = new Roles()
     viewAllEmployees.getAll().then((empTable)=> {
         roles.getAll().then((rolesTable) => {
-             let roleArray = roleTable.map((r)=> {
+             let roleArray = rolesTable.map((r)=> {
                 return `${r.title}`
              });
              let empArray = empTable.map((e)=>{
@@ -134,4 +124,4 @@ const updateEmployee = ()=> {
         })
     })
 }
-module.exports = {viewAllEmployees, addEmployee, updateEmployee}
+module.exports = { viewAllEmployees, addEmployee, updateEmployee }

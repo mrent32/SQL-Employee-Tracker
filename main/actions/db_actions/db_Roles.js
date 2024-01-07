@@ -15,7 +15,7 @@ class Roles {
         r.salary,
         d.dep_name AS Department
         FROM roles r
-        INNER JOIN department d ON d.id = r.department_id`;
+        LEFT JOIN department d ON d.id = r.department_id`;
         return db
         .promise()
         .query(sql)

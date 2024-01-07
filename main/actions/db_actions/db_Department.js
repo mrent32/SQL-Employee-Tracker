@@ -25,7 +25,7 @@ class Department {
         })
     }
 
-    addDeparment() {
+    addDepartment() {
         const sql = `INSERT INTO deparment(dep_name)
         VALUES ('${this.dep_name}')`
         return db 

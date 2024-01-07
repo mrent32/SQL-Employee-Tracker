@@ -1,5 +1,8 @@
 const inquirer = require('inquirer');
-
+const db = require('../config/createConnection')
+// const { viewAllEmployees, addEmployee, updateEmployee} = require('./actions/employees');
+// const { viewAllDepartments, addDepartment} = require('./actions/department')
+// const {viewAllRoles, addRole} = require('./actions/roles')
 
 const mainMenu = ()  => {
     inquirer.prompt([
@@ -19,27 +22,28 @@ const mainMenu = ()  => {
             ],
         },
     ])
-   .then((mainMenu) => {
+   .then(({mainMenu}) => {
+    console.log(mainMenu)
     switch(mainMenu) {
-        case  'View all employees':
+        case  'View employees':
           viewAllEmployees();
           break;
-          case  'View all departments':
+          case  'View departments':
           viewAllDepartments();
           break;
-          case  'View all roles':
+          case  'View roles':
           viewAllRoles();
           break;
-          case  'Add an employee':
+          case  'Add employee':
           addAnEmployee();
           break;
-          case  'Add a department':
+          case  'Add department':
           addDepartment();
           break;
-          case  'Add a role':
+          case  'Add role':
           addRole();
           break;
-          case  'Update an employee':
+          case  'Update employees':
           updateEmployee();
           break;
           case 'Exit':
@@ -50,7 +54,25 @@ const mainMenu = ()  => {
    }
    )
 }
+const viewAllDepartments = () => {
+    db.promise().query('SELECT * FROM department').then(([data]) => {
+    console.table(data);
+    mainMenu()
+   })
+}
 
+const viewAllEmployees = () => {
+    db.promise().query('SELECT * FROM employee')
+    .then(([empTable]) => {
+        console.log(``)
+        console.table(empTable)
+        console.log('')
+    })
+    .then(() => {
+        mainMenu()
+
+    })
+}
 module.exports = mainMenu;
    
     

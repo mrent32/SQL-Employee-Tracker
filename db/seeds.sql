@@ -15,4 +15,6 @@ VALUES ("Head of Marketing", 250000, 2),
 INSERT INTO employee (last_name, first_name, role_id, manager_id)
 VALUES ("Smith", "John", 1, NULL),
         ("Abernathy", "Jack", 1, NULL),
-        ()
+        ("Clayton", "Jennifer", 2, 1),
+        ("Rinkum", "Andrew", 1, 3),
+        ("Andolina", "Meredith", 1, 4);
