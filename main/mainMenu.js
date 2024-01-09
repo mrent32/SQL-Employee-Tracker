@@ -61,8 +61,32 @@ const viewAllDepartments = () => {
    })
 }
 
+const viewAllRoles = () => {
+    db.promise().query(`SELECT
+    r.title,
+    r.salary,
+    d.dep_name AS Department
+    FROM roles r
+    LEFT JOIN department d ON d.id = r.department_id`)
+    .then(([roleTable]) => {
+        console.log(``)
+        console.table(roleTable)
+        console.log('')
+    })
+    .then(()=> {
+        mainMenu()
+    })
+}
+
 const viewAllEmployees = () => {
-    db.promise().query('SELECT * FROM employee')
+    db.promise().query(`SELECT 
+    e.first_name AS 'First name',
+    e.last_name AS 'Last name',
+    r.title AS 'Role',
+    CONCAT(g.first_name, '  ',g.last_name) AS Manager
+    FROM employee e
+    LEFT JOIN roles r ON r.id = e.role_id
+    LEFT JOIN employee g ON g.id = e.manager_id`)
     .then(([empTable]) => {
         console.log(``)
         console.table(empTable)
@@ -71,6 +95,42 @@ const viewAllEmployees = () => {
     .then(() => {
         mainMenu()
 
+    })
+}
+const addRole = async () => {
+    const [departments] = await db.promise().query('SELECT * FROM department')
+    const departmentArray = departments.map(department => ({name: department.dep_name, value: department.id}))
+    console.log(departmentArray)
+    inquirer.prompt([
+        {
+            type: 'input',
+            message: 'What is the name of the role?',
+            name: 'title',
+        },
+        {
+            type: 'input',
+            message: 'What is the salary for this role?',
+            name: 'salary',
+        },
+        {
+            type: 'list',
+            mesasge: 'What department does the role belong to?',
+            choices: departmentArray,
+            name: 'department_id',
+        },
+    ])
+    .then(({title, salary, department_id}) => {
+        db.promise().query('INSERT INTO roles SET ?', {title, salary, department_id})
+        .then(([res]) => {
+            if(res.affectedRows > 0) {
+                viewAllRoles()
+            } else {
+                console.error('failed to add role')
+                mainMenu()
+            } 
+            
+        })
+        
     })
 }
 module.exports = mainMenu;

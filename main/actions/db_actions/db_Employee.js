@@ -12,14 +12,7 @@ class Employee {
     }
 
     viewAll() {
-        const sql = `SELECT 
-        e.first_name AS 'First name',
-        e.last_name AS 'Last name',
-        r.title AS 'Role',
-        CONCAT(g.first_name, '  ',g.last_name) AS Manager
-        FROM employee e
-        LEFT JOIN roles r ON r.id = e.role_id
-        LEFT JOIN employee g ON g.id = e.manager_id`;
+        const sql = ;
         return db
             .promise()
             .query(sql)
