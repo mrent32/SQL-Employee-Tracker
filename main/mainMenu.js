@@ -1,8 +1,5 @@
 const inquirer = require('inquirer');
 const db = require('../config/createConnection')
-// const { viewAllEmployees, addEmployee, updateEmployee} = require('./actions/employees');
-// const { viewAllDepartments, addDepartment} = require('./actions/department')
-// const {viewAllRoles, addRole} = require('./actions/roles')
 
 const mainMenu = ()  => {
     inquirer.prompt([
@@ -35,7 +32,7 @@ const mainMenu = ()  => {
           viewAllRoles();
           break;
           case  'Add employee':
-          addAnEmployee();
+          addEmployee();
           break;
           case  'Add department':
           addDepartment();
@@ -132,6 +129,102 @@ const addRole = async () => {
         })
         
     })
+}
+const addEmployee = async () => {
+    const [employees] = await db.promise().query('SELECT * FROM employee')
+    const employeeArray = employees.map(employee => ({name: employee.emp_name, value: employee.id}))
+    console.log(employeeArray)
+    inquirer.prompt([
+        {
+            type: 'input',
+            message: 'What is the employees first name',
+            name: 'first_name',
+        },
+        {
+            type: 'input',
+            message: 'what is the employees last name',
+            name: 'last_name',
+        },
+        {
+            type: 'list',
+            message: 'what is the employees role',
+            choices: employeeArray,
+            name: 'role_id',
+        },
+        {
+            type: 'list',
+            message: 'Who is the employees manager',
+            choices: employeeArray,
+            name: 'manager_id',
+        },
+    ])
+    .then(({first_name, last_name, role_id, manager_id}) => {
+        db.promise().query('INSERT INTO employee SET ?', {first_name, last_name, role_id, manager_id})
+        .then(([res])=> {
+            if(res.affectedRows > 0) {
+                viewAllEmployees()
+            } else {
+                console.error('failed to add employee')
+                mainMenu()
+            } 
+        })
+    })
+}
+
+const addDepartment = async () => {
+    const [departments] = await db.promise().query('SELECT * FROM department')
+    const departmentArray = departments.map(department => ({name: department.dep_name, value: department.id}))
+    console.log(departmentArray)
+    inquirer.prompt([
+        {
+            type: 'input',
+            message: 'What is the name of the department',
+            name: 'dep_name',
+        },
+    ])
+    .then(({dep_name}) => {
+        db.promise().query('INSERT INTO department SET ?', {dep_name})
+        .then(([res]) => {
+            if(res.affectedRows > 0) {
+                viewAllDepartments()
+            } else {
+                console.error('failed to add department')
+                mainMenu()
+            }
+        })
+    })
+}
+const updateEmployee = async () => {
+    const [employees] = await db.promise().query('SELECT * FROM employee')
+    const employeeArray = employees.map(employee => ({name: employee.emp_name, value: employee.id}))
+    const [roles] = await db.promise().query('SELECT * FROM role')
+    const roleArray = roles.map(role => ({name: role.role_name, value: role.id }))
+    console.log(employeeArray)
+    inquirer.prompt([
+        {
+            type: 'list',
+            message: 'Choose an employee to update.',
+            choices: employeeArray,
+            name: 'employee',
+        },
+        {
+            type: 'list',
+            message: 'Choose the employees new role.',
+            choices: roleArray,
+            name: 'role',
+        },
+     ])
+     .then(({employee, role}) => {
+        db.promise().query('UPDATE employee SET ?', {employee, role})
+        .then(([res]) => {
+            if(res.affectedRows > 0) {
+                viewAllEmployees()
+            } else {
+                console.error('failed to update employee')
+                mainMenu()
+            }
+        })
+     })
 }
 module.exports = mainMenu;
    

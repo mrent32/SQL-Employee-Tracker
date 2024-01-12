@@ -4,7 +4,7 @@ VALUES ("Engineering"),
         ("Project Management"),
         ("Finance");
 
-INSERT INTO roles (title, salary, department_id)
+INSERT INTO role (title, salary, department_id)
 VALUES ("Head of Marketing", 250000, 2),
         ("Lead Software Developer", 150000, 4),
         ("Junior Developer", 80000, 4),

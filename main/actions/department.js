@@ -7,13 +7,7 @@ const mainMenu = require('../mainMenu')
 
 
 const addDepartment = () => {
-    inquirer.prompt([
-        {
-            type: 'input',
-            message: 'What is the name of the department',
-            name: 'department',
-        },
-    ])
+    
     .then(({department})=> {
         const addDep = new Department(null, department)
         addDep.addDepartment()
